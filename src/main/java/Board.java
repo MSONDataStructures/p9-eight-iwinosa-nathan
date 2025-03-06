@@ -3,8 +3,17 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.MinPQ;
 
 public class Board {
-
+    private final int[][] blocks;
+    private final int n;
     public Board(int[][] blocks) {
+
+        this.n = blocks.length;
+        this.blocks = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                this.blocks[i][j] = blocks[i][j];
+            }
+        }
         // construct a board from an n-by-n array of blocks
         // (where blocks[i][j] = block in row i, column j)
         // suggestions for immutability in the Binary Heap video
@@ -12,12 +21,21 @@ public class Board {
 
     public int dimension() {
         // board dimension n
-        return 0;
+        return n;
     }
 
     public int hamming() {
         // number of blocks out of place
-        return 0;
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int block = blocks[i][j];
+                if (block != 0 && block != i * n + j + 1) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     public int manhattan() {
@@ -47,7 +65,20 @@ public class Board {
 
     public boolean isGoal() {
         // is this board the goal board?
-        return false;
+        int expectedValue = 1;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == n - 1 && j == n - 1) {
+                    if (blocks[i][j] != 0) {
+                        return false;
+                    }
+                } else if (blocks[i][j] != expectedValue) {
+                    return false;
+                }
+                expectedValue++;
+            }
+        }
+        return true;
     }
 
     public Iterable<Board> neighbors() {
