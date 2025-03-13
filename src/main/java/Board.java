@@ -2,6 +2,7 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.MinPQ;
 import java.lang.StringBuilder;
+import java.util.ArrayList;
 
 public class Board {
     private final int[][] blocks;
@@ -142,32 +143,46 @@ public class Board {
     }
 
     public Iterable<Board> neighbors() {
-        // all neighboring boards
+        // holds all neighbors found
+        ArrayList<Board> neighbors = new ArrayList<>();
+
+        //finds the location of the empty space
         int mainRow = 0;
         int mainCol = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (blocks[i][j] == 0) {
-                    mainRow = j;
-                    mainCol = i;
+                    mainRow = i;
+                    mainCol = j;
                 }
             }
         }
-
-        int leftRow = mainRow - 1;
-        int leftCol = mainCol;
-        int rightRow = mainRow + 1;
-        int rightCol = mainCol;
-        int upRow = mainRow;
-        int upCol = mainCol - 1;
-        int downRow = mainRow;
-        int downCol = mainCol + 1;
-
-        if (leftRow >= 0 && leftRow < n && leftCol >= 0 && leftCol < n) {
-
+        //checks and then makes left neighbor
+        if (mainRow - 1 >= 0) {
+            int [][] leftBoard = duplicateBoard();
+            movePiece(leftBoard, mainRow, mainCol, mainRow - 1, mainCol);
+            neighbors.add(new Board(leftBoard));
         }
-        //will finish later.
-        return null;
+        //checks and then makes right neighbor
+        if (mainRow + 1 < n) {
+            int [][] rightBoard = duplicateBoard();
+            movePiece(rightBoard, mainRow, mainCol, mainRow + 1, mainCol);
+            neighbors.add(new Board(rightBoard));
+        }
+        //checks and then makes up neighbor
+        if (mainCol - 1 >= 0) {
+            int [][] upBoard = duplicateBoard();
+            movePiece(upBoard, mainRow, mainCol, mainRow, mainCol - 1);
+            neighbors.add(new Board(upBoard));
+        }
+        //checks and then makes down neighbor
+        if (mainCol + 1 < n) {
+            int [][] downBoard = duplicateBoard();
+            movePiece(downBoard, mainRow, mainCol, mainRow, mainCol + 1);
+            neighbors.add(new Board(downBoard));
+        }
+
+        return neighbors;
     }
 
     public static void main(String[] args) {
@@ -191,5 +206,19 @@ public class Board {
             for (Board board : solver.solution())
                 StdOut.println(board);
         }
+    }
+    private void movePiece(int[][] board, int rowOld, int colOld, int rowNew, int colNew) {
+        int temp = board[rowOld][colOld];
+        board[rowOld][colOld] = board[rowNew][colNew];
+        board[rowNew][colNew] = temp;
+    }
+    private int[][] duplicateBoard() {
+        int[][] newBoard = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                newBoard[i][j] = blocks[i][j];
+            }
+        }
+        return newBoard;
     }
 }
