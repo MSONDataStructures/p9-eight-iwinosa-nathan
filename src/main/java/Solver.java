@@ -6,8 +6,15 @@ public class Solver {
     // you will need to add a class for search nodes,
     // and a MinPQ to store them in as you solve
 
+    private class SearchNode {
+        public Board board;
+        public int manhattan;
+        public int moves;
+        public int priority;
+    }
     public Solver(Board initial) {
       // find a solution to the initial board (using the A* algorithm)
+        MinPQ<SearchNode> pq = new MinPQ<>();
     }
 
     public boolean isSolvable() {
