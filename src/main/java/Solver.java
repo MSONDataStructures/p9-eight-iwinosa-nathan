@@ -19,7 +19,7 @@ public class Solver {
             this.manhattan = board.manhattan();
             this.priority = moves + manhattan;
         }
-        //hi
+
         @Override
         public int compareTo(SearchNode o) {
             if (this.priority > o.priority) return 1;
